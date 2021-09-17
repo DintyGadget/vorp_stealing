@@ -44,8 +44,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient", function(name, inv)
 							if qt ~= nil then
 								local closestPlayer, closestDistance = GetClosestPlayer()
 								TriggerServerEvent("vorpinventory:steal_money", GetPlayerServerId(closestPlayer), qt)
-								WarMenu.CloseMenu()
-								WarMenu.IsMenuAboutToBeClosed()
 							end
 						end)
 					end
@@ -77,8 +75,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
 								--print("Testing:", v["Id"])
 								local closestPlayer, closestDistance = GetClosestPlayer()
 								TriggerServerEvent("vorpinventory:steal_items", v["Id"], GetPlayerServerId(closestPlayer), qt)
-								WarMenu.CloseMenu()
-								WarMenu.IsMenuAboutToBeClosed()
 							end
 						end)
 					end
@@ -107,8 +103,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient3", function(name, inv)
 						--print("Testing:", tostring(v["Id"]))
 						local closestPlayer, closestDistance = GetClosestPlayer()
 						TriggerServerEvent("vorpinventory:steal_weapon", v["Id"], GetPlayerServerId(closestPlayer))
-						WarMenu.CloseMenu()
-						WarMenu.IsMenuAboutToBeClosed()
 					end
                 end
             end
