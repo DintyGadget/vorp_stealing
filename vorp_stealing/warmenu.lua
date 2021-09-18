@@ -1,10 +1,10 @@
 WarMenu = { }
 
-WarMenu.debug = false
+WarMenu.debug = true
 
 
 local menus = { }
-local keys = { up = 0x6319DB71, down = 0x05CA7C52, left = 0xA65EBAB4, right = 0xDEB34313, select = 0xC7B5340A, back = 0x5B48F938 }
+local keys = { up = 0x6319DB71, down = 0x05CA7C52, left = 0xA65EBAB4, right = 0xDEB34313, select = 0xC7B5340A, back = 0x156F7119 }
 local optionCount = 0
 
 local currentKey = nil
@@ -60,8 +60,6 @@ local function setMenuVisible(id, visible, holdCurrent)
 			end
 
 			currentMenu = id
-		else
-			currentMenu = nil
 		end
 	end
 end
@@ -296,7 +294,6 @@ end
 
 function WarMenu.CloseMenu()
 	FreezeEntityPosition(PlayerPedId(), false)
-	ClearPedTasks(PlayerPedId(), 1, 1)
 	if menus[currentMenu] then
 		if menus[currentMenu].aboutToBeClosed then
 			menus[currentMenu].aboutToBeClosed = false
@@ -431,13 +428,13 @@ function WarMenu.Display()
 				else
 					menus[currentMenu].currentOption = optionCount
 				end
-			elseif IsDisabledControlJustReleased(0, keys.left) then
+			elseif IsControlJustReleased(1, keys.left) then
 				currentKey = keys.left
-			elseif IsDisabledControlJustReleased(0, keys.right) then
+			elseif IsControlJustReleased(1, keys.right) then
 				currentKey = keys.right
-			elseif IsControlJustReleased(0, keys.select) then
+			elseif IsControlJustReleased(1, keys.select) then
 				currentKey = keys.select
-			elseif IsDisabledControlJustReleased(0, keys.back) then
+			elseif IsControlJustReleased(1, keys.back) then
 				if menus[menus[currentMenu].previousMenu] then
 					setMenuVisible(menus[currentMenu].previousMenu, true)
 				else
