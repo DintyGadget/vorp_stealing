@@ -60,6 +60,8 @@ local function setMenuVisible(id, visible, holdCurrent)
 			end
 
 			currentMenu = id
+		else
+			currentMenu = nil
 		end
 	end
 end
@@ -428,13 +430,13 @@ function WarMenu.Display()
 				else
 					menus[currentMenu].currentOption = optionCount
 				end
-			elseif IsControlJustReleased(1, keys.left) then
+			elseif IsDisabledControlJustReleased(0, keys.left) then
 				currentKey = keys.left
-			elseif IsControlJustReleased(1, keys.right) then
+			elseif IsDisabledControlJustReleased(0, keys.right) then
 				currentKey = keys.right
-			elseif IsControlJustReleased(1, keys.select) then
+			elseif IsControlJustReleased(0, keys.select) then
 				currentKey = keys.select
-			elseif IsControlJustReleased(1, keys.back) then
+			elseif IsDisabledControlJustReleased(0, keys.back) then
 				if menus[menus[currentMenu].previousMenu] then
 					setMenuVisible(menus[currentMenu].previousMenu, true)
 				else

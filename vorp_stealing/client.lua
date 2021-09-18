@@ -4,83 +4,87 @@ RegisterNetEvent("vorpinventory:inspectPlayerClient")
 AddEventHandler("vorpinventory:inspectPlayerClient", function(name, inv)
     local _name = name
     local _inv = inv
-    WarMenu.CreateSubMenu(_name, 'funny_search', Config.Language.searchmoney)
+    WarMenu.CreateMenu(_name, Config.Language.searchmoney)
     WarMenu.SetMenuX(_name, 0.7) -- [0.0..1.0] top left corner
     WarMenu.SetMenuY(_name, 0.1) -- [0.0..1.0] top
     WarMenu.OpenMenu(_name)
 	
-        while not WarMenu.IsMenuAboutToBeClosed() do 
-			Citizen.Wait(0)
-            if WarMenu.IsMenuOpened(_name) then
-                for k,v in pairs(_inv) do
-                    if WarMenu.Button(v["Name"] .. " (" .. tostring(v["Quantity"]) .. " $)") then 
-						TriggerEvent("vorpinputs:getInput", Config.Language.take, Config.Language.quantity, function(cb)
-							local qt = tonumber(cb)
-							if qt ~= nil then
-								local closestPlayer, closestDistance = GetClosestPlayer()
-								TriggerServerEvent("vorpinventory:steal_money", GetPlayerServerId(closestPlayer), qt)
-								WarMenu.CloseMenu()
-							end
-						end)
-					end
-                end
-            end
-			WarMenu.Display()
-        end
+	while not WarMenu.IsMenuAboutToBeClosed() do 
+		Citizen.Wait(0)
+		if WarMenu.IsMenuOpened(_name) then
+			for k,v in pairs(_inv) do
+				if WarMenu.Button(v["Name"] .. " (" .. tostring(v["Quantity"]) .. " $)") then 
+					TriggerEvent("vorpinputs:getInput", Config.Language.take, Config.Language.quantity, function(cb)
+						local qt = tonumber(cb)
+						if qt ~= nil then
+							local closestPlayer, closestDistance = GetClosestPlayer()
+							TriggerServerEvent("vorpinventory:steal_money", GetPlayerServerId(closestPlayer), qt)
+							WarMenu.CloseMenu()
+						end
+					end)
+				end
+			end
+		end
+		WarMenu.Display()
+	end
+	WarMenu.CloseMenu()
 end)
 
 RegisterNetEvent("vorpinventory:inspectPlayerClient2")
 AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
     local _name = name
     local _inv = inv
-    WarMenu.CreateSubMenu(_name, 'funny_search', Config.Language.searchitems)
+    WarMenu.CreateMenu(_name, Config.Language.searchitems)
     WarMenu.SetMenuX(_name, 0.7) -- [0.0..1.0] top left corner
     WarMenu.SetMenuY(_name, 0.1) -- [0.0..1.0] top
     WarMenu.OpenMenu(_name)
-        while not WarMenu.IsMenuAboutToBeClosed() do 
-            Citizen.Wait(0)
-            if WarMenu.IsMenuOpened(_name) then
-                for k,v in pairs(_inv) do
-                    if WarMenu.Button(v["Name"] .. " (x" .. tostring(v["Quantity"]) .. ")") then 
-						TriggerEvent("vorpinputs:getInput", Config.Language.take, Config.Language.quantity, function(cb)
-							local qt = tonumber(cb)
-							if qt ~= nil then
-								--print("Testing:", v["Id"])
-								local closestPlayer, closestDistance = GetClosestPlayer()
-								TriggerServerEvent("vorpinventory:steal_items", v["Id"], GetPlayerServerId(closestPlayer), qt)
-								WarMenu.CloseMenu()
-							end
-						end)
-					end
-                end
-            end
-			WarMenu.Display()
-        end
+	
+	while not WarMenu.IsMenuAboutToBeClosed() do 
+		Citizen.Wait(0)
+		if WarMenu.IsMenuOpened(_name) then
+			for k,v in pairs(_inv) do
+				if WarMenu.Button(v["Name"] .. " (x" .. tostring(v["Quantity"]) .. ")") then 
+					TriggerEvent("vorpinputs:getInput", Config.Language.take, Config.Language.quantity, function(cb)
+						local qt = tonumber(cb)
+						if qt ~= nil then
+							--print("Testing:", v["Id"])
+							local closestPlayer, closestDistance = GetClosestPlayer()
+							TriggerServerEvent("vorpinventory:steal_items", v["Id"], GetPlayerServerId(closestPlayer), qt)
+							WarMenu.CloseMenu()
+						end
+					end)
+				end
+			end
+		end
+		WarMenu.Display()
+	end
+	WarMenu.CloseMenu()
 end)
 
 RegisterNetEvent("vorpinventory:inspectPlayerClient3")
 AddEventHandler("vorpinventory:inspectPlayerClient3", function(name, inv)
     local _name = name
     local _inv = inv
-    WarMenu.CreateSubMenu(_name, 'funny_search', Config.Language.searchweapons)
+    WarMenu.CreateMenu(_name, Config.Language.searchweapons)
     WarMenu.SetMenuX(_name, 0.7) -- [0.0..1.0] top left corner
     WarMenu.SetMenuY(_name, 0.1) -- [0.0..1.0] top
     WarMenu.OpenMenu(_name)
 	 
-        while not WarMenu.IsMenuAboutToBeClosed() do 
-			Citizen.Wait(0)
-            if WarMenu.IsMenuOpened(_name) then
-                for k,v in pairs(_inv) do
-                    if WarMenu.Button(v["Name"] .. " (x" .. tostring(v["Quantity"]) .. ")") then 
-						--print("Testing:", tostring(v["Id"]))
-						local closestPlayer, closestDistance = GetClosestPlayer()
-						TriggerServerEvent("vorpinventory:steal_weapon", v["Id"], GetPlayerServerId(closestPlayer))
-						WarMenu.CloseMenu()
-					end
-                end
-            end
-			WarMenu.Display()
-        end
+	while not WarMenu.IsMenuAboutToBeClosed() do 
+		Citizen.Wait(0)
+		if WarMenu.IsMenuOpened(_name) then
+			for k,v in pairs(_inv) do
+				if WarMenu.Button(v["Name"] .. " (x" .. tostring(v["Quantity"]) .. ")") then 
+					--print("Testing:", tostring(v["Id"]))
+					local closestPlayer, closestDistance = GetClosestPlayer()
+					TriggerServerEvent("vorpinventory:steal_weapon", v["Id"], GetPlayerServerId(closestPlayer))
+					WarMenu.CloseMenu()
+				end
+			end
+		end
+		WarMenu.Display()
+	end
+	WarMenu.CloseMenu()
 end)
 -------------------------------------------Main menu-------------------------------------------
 Citizen.CreateThread(function() 
@@ -114,7 +118,6 @@ Citizen.CreateThread(function()
 				Citizen.InvokeNative(0xE9990552DEC71600)
 				if IsControlJustReleased(0, Config.OpenMenu) then
 					WarMenu.OpenMenu('funny_search')
-					WarMenu.Display()
 				end
 			elseif not Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) or IsEntityDead(GetPlayerPed(closestPlayer)) then
 				WarMenu.CloseMenu()
@@ -173,3 +176,20 @@ function GetClosestPlayer()
     end
     return closestPlayer, closestDistance
 end
+
+-----------------------------Refresh
+RegisterNetEvent('funnysearch:refreshmenu')
+AddEventHandler('funnysearch:refreshmenu', function(Id,qt)
+	WarMenu.OpenMenu('funny_search')
+	if Id ~= nil and qt ~= nil then
+		for k,v in pairs(inv) do 
+			if v.Id == Id then
+				if v.Quantity == tonumber(qt) then
+					table.remove(inv,k)
+				else
+					v.Quantity = v.Quantity - tonumber(qt)
+				end
+			end
+		end
+	end
+end)

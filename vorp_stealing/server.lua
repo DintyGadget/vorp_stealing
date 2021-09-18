@@ -28,6 +28,7 @@ AddEventHandler("vorpinventory:steal_money", function(target, qt)
 	TriggerEvent("vorp:addMoney", _source, 0, tonumber(Character.money+number))
 	TriggerEvent("vorp:removeMoney", target, 0, tonumber(Character.money+number))
 	end
+	TriggerClientEvent('funnysearch:refreshmenu',_source,Character.money,tonumber(qt))
 end)
 ----------------------------------------SearchItems---------------------------------------------------
 
@@ -56,6 +57,7 @@ AddEventHandler("vorpinventory:steal_items", function(item, target, qt)
 	--print("StealItems:", item)
 	VorpInv.addItem(_source, item, tonumber(qt))
 	VorpInv.subItem(target, item, tonumber(qt))
+	TriggerClientEvent('funnysearch:refreshmenu',_source,item,tonumber(qt))
 end)
 
 ------------------------------------------SearchWeapon-----------------------------------------------------
@@ -83,9 +85,10 @@ AddEventHandler("vorpinventory:steal_weapon", function(weapid, target)
     local User = VorpCore.getUser(target) 
     local Character = User.getUsedCharacter 
 	local weapons = VorpInv.getUserWeapons(target)
-			--print("StealWeapon:", weapid)
-			VorpInv.giveWeapon(_source, weapid, target)
-			VorpInv.subWeapon(target, weapid)
+	--print("StealWeapon:", weapid)
+	VorpInv.giveWeapon(_source, weapid, target)
+	VorpInv.subWeapon(target, weapid)
+	TriggerClientEvent('funnysearch:refreshmenu',_source,weapid,tonumber(1))
 end)
 
 function getWeaponNameFromId(weapon) 
