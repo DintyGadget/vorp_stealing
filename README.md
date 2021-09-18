@@ -9,4 +9,3 @@ Known Issues:
  
   Temporary solution to the problem: close the menu manually, and do not leave the player, so that the menu does not overlap
   
- - If the player is dead it cannot be searched
