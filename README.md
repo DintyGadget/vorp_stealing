@@ -1,6 +1,6 @@
 # vorp_stealing
 
-- This script allows you to steal items from players when they are hogtied.
+- This script allows you to steal items from players when they are hogtied or dead.
 
 - Walk up to the tied player and press G to search him
 
