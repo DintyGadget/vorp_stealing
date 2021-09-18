@@ -83,9 +83,9 @@ AddEventHandler("vorpinventory:steal_weapon", function(weapid, target)
     local User = VorpCore.getUser(target) 
     local Character = User.getUsedCharacter 
 	local weapons = VorpInv.getUserWeapons(target)
-	--print("StealWeapon:", weapid)
-	VorpInv.giveWeapon(_source, weapid, target)
-	VorpInv.subWeapon(target, weapid)
+			--print("StealWeapon:", weapid)
+			VorpInv.giveWeapon(_source, weapid, target)
+			VorpInv.subWeapon(target, weapid)
 end)
 
 function getWeaponNameFromId(weapon) 
