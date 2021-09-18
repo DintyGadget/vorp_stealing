@@ -1,41 +1,16 @@
 local inv = {}
-
-------------------------------------------------Keybind and call menu-------------------------
-Citizen.CreateThread(function() 
-    while true do 
-        Wait(0)
-		local closestPlayer, closestDistance = GetClosestPlayer()
-		if closestDistance < 2.0 and closestPlayer ~= -1 then
-			if Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) then
-				SetTextScale(0.5, 0.5)
-				local msg = Config.Language.drawtext
-				local str = Citizen.InvokeNative(0xFA925AC00EB830B9, 10, "LITERAL_STRING", msg, Citizen.ResultAsLong())
-				Citizen.InvokeNative(0xFA233F8FE190514C, str)
-				Citizen.InvokeNative(0xE9990552DEC71600)
-				if IsControlJustReleased(0, Config.OpenMenu) then
-					WarMenu.OpenMenu('funny_search')
-				end
-			elseif not Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) then
-				WarMenu.CloseMenu()
-			end
-		elseif closestDistance > 2.0 and closestPlayer ~= -1 then
-			WarMenu.CloseMenu()
-		end
-	end
-end)
 ---------------------------------------------Menu items and etc func----------------------------------------
 RegisterNetEvent("vorpinventory:inspectPlayerClient")
 AddEventHandler("vorpinventory:inspectPlayerClient", function(name, inv)
     local _name = name
     local _inv = inv
-    WarMenu.CreateMenu(_name, Config.Language.searchmoney)
+    WarMenu.CreateSubMenu(_name, 'funny_search', Config.Language.searchmoney)
     WarMenu.SetMenuX(_name, 0.7) -- [0.0..1.0] top left corner
     WarMenu.SetMenuY(_name, 0.1) -- [0.0..1.0] top
     WarMenu.OpenMenu(_name)
 	
-    Citizen.CreateThread(function() 
         while not WarMenu.IsMenuAboutToBeClosed() do 
-            Wait(0)
+			Citizen.Wait(0)
             if WarMenu.IsMenuOpened(_name) then
                 for k,v in pairs(_inv) do
                     if WarMenu.Button(v["Name"] .. " (" .. tostring(v["Quantity"]) .. " $)") then 
@@ -44,28 +19,26 @@ AddEventHandler("vorpinventory:inspectPlayerClient", function(name, inv)
 							if qt ~= nil then
 								local closestPlayer, closestDistance = GetClosestPlayer()
 								TriggerServerEvent("vorpinventory:steal_money", GetPlayerServerId(closestPlayer), qt)
+								WarMenu.CloseMenu()
 							end
 						end)
 					end
                 end
             end
-            WarMenu.Display()
+			WarMenu.Display()
         end
-    end)
 end)
 
 RegisterNetEvent("vorpinventory:inspectPlayerClient2")
 AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
     local _name = name
     local _inv = inv
-    WarMenu.CreateMenu(_name, Config.Language.searchitems)
+    WarMenu.CreateSubMenu(_name, 'funny_search', Config.Language.searchitems)
     WarMenu.SetMenuX(_name, 0.7) -- [0.0..1.0] top left corner
     WarMenu.SetMenuY(_name, 0.1) -- [0.0..1.0] top
     WarMenu.OpenMenu(_name)
-	
-    Citizen.CreateThread(function() 
         while not WarMenu.IsMenuAboutToBeClosed() do 
-            Wait(0)
+            Citizen.Wait(0)
             if WarMenu.IsMenuOpened(_name) then
                 for k,v in pairs(_inv) do
                     if WarMenu.Button(v["Name"] .. " (x" .. tostring(v["Quantity"]) .. ")") then 
@@ -75,40 +48,39 @@ AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
 								--print("Testing:", v["Id"])
 								local closestPlayer, closestDistance = GetClosestPlayer()
 								TriggerServerEvent("vorpinventory:steal_items", v["Id"], GetPlayerServerId(closestPlayer), qt)
+								WarMenu.CloseMenu()
 							end
 						end)
 					end
                 end
             end
-            WarMenu.Display()
+			WarMenu.Display()
         end
-    end)
 end)
 
 RegisterNetEvent("vorpinventory:inspectPlayerClient3")
 AddEventHandler("vorpinventory:inspectPlayerClient3", function(name, inv)
     local _name = name
     local _inv = inv
-    WarMenu.CreateMenu(_name, Config.Language.searchweapons)
+    WarMenu.CreateSubMenu(_name, 'funny_search', Config.Language.searchweapons)
     WarMenu.SetMenuX(_name, 0.7) -- [0.0..1.0] top left corner
     WarMenu.SetMenuY(_name, 0.1) -- [0.0..1.0] top
     WarMenu.OpenMenu(_name)
-	
-    Citizen.CreateThread(function() 
+	 
         while not WarMenu.IsMenuAboutToBeClosed() do 
-            Wait(0)
+			Citizen.Wait(0)
             if WarMenu.IsMenuOpened(_name) then
                 for k,v in pairs(_inv) do
                     if WarMenu.Button(v["Name"] .. " (x" .. tostring(v["Quantity"]) .. ")") then 
 						--print("Testing:", tostring(v["Id"]))
 						local closestPlayer, closestDistance = GetClosestPlayer()
 						TriggerServerEvent("vorpinventory:steal_weapon", v["Id"], GetPlayerServerId(closestPlayer))
+						WarMenu.CloseMenu()
 					end
                 end
             end
-            WarMenu.Display()
+			WarMenu.Display()
         end
-    end)
 end)
 -------------------------------------------Main menu-------------------------------------------
 Citizen.CreateThread(function() 
@@ -117,7 +89,7 @@ Citizen.CreateThread(function()
     WarMenu.SetMenuY('funny_search', 0.15) -- [0.0..1.0] top
 	
 	while true do
-        Wait(0) 
+		Citizen.Wait(0)
 		if WarMenu.IsMenuOpened('funny_search') then
 			if WarMenu.Button(Config.Language.money) then
 				WarMenu.CloseMenu()
@@ -129,8 +101,27 @@ Citizen.CreateThread(function()
 				WarMenu.CloseMenu()
 				TriggerEvent("inspectplayer3")
 			end
-		WarMenu.Display()
+			WarMenu.Display()
 		end
+                        ----------------------------Keybind and call menu-------------------------
+	local closestPlayer, closestDistance = GetClosestPlayer()
+		if closestDistance < 2.0 and closestPlayer ~= -1 then
+			if Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) or IsEntityDead(GetPlayerPed(closestPlayer)) then
+				SetTextScale(0.5, 0.5)
+				local msg = Config.Language.drawtext
+				local str = Citizen.InvokeNative(0xFA925AC00EB830B9, 10, "LITERAL_STRING", msg, Citizen.ResultAsLong())
+				Citizen.InvokeNative(0xFA233F8FE190514C, str)
+				Citizen.InvokeNative(0xE9990552DEC71600)
+				if IsControlJustReleased(0, Config.OpenMenu) then
+					WarMenu.OpenMenu('funny_search')
+					WarMenu.Display()
+				end
+			elseif not Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) or IsEntityDead(GetPlayerPed(closestPlayer)) then
+				WarMenu.CloseMenu()
+			end
+		elseif closestDistance > 2.0 and closestPlayer ~= -1 then
+			WarMenu.CloseMenu()
+		end		
 	end
 end)
 

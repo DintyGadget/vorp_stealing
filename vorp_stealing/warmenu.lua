@@ -1,10 +1,10 @@
 WarMenu = { }
 
-WarMenu.debug = true
+WarMenu.debug = false
 
 
 local menus = { }
-local keys = { up = 0x6319DB71, down = 0x05CA7C52, left = 0xA65EBAB4, right = 0xDEB34313, select = 0xC7B5340A, back = 0x156F7119 }
+local keys = { up = 0x6319DB71, down = 0x05CA7C52, left = 0xA65EBAB4, right = 0xDEB34313, select = 0xC7B5340A, back = 0x5B48F938 }
 local optionCount = 0
 
 local currentKey = nil
