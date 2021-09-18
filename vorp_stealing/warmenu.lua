@@ -296,6 +296,7 @@ end
 
 function WarMenu.CloseMenu()
 	FreezeEntityPosition(PlayerPedId(), false)
+	ClearPedTasks(PlayerPedId(), 1, 1)
 	if menus[currentMenu] then
 		if menus[currentMenu].aboutToBeClosed then
 			menus[currentMenu].aboutToBeClosed = false

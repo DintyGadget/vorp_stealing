@@ -19,7 +19,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient", function(name, inv)
 						if qt ~= nil then
 							local closestPlayer, closestDistance = GetClosestPlayer()
 							TriggerServerEvent("vorpinventory:steal_money", GetPlayerServerId(closestPlayer), qt)
-							WarMenu.CloseMenu()
 						end
 					end)
 				end
@@ -27,7 +26,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient", function(name, inv)
 		end
 		WarMenu.Display()
 	end
-	WarMenu.CloseMenu()
 end)
 
 RegisterNetEvent("vorpinventory:inspectPlayerClient2")
@@ -50,7 +48,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
 							--print("Testing:", v["Id"])
 							local closestPlayer, closestDistance = GetClosestPlayer()
 							TriggerServerEvent("vorpinventory:steal_items", v["Id"], GetPlayerServerId(closestPlayer), qt)
-							WarMenu.CloseMenu()
 						end
 					end)
 				end
@@ -58,7 +55,6 @@ AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
 		end
 		WarMenu.Display()
 	end
-	WarMenu.CloseMenu()
 end)
 
 RegisterNetEvent("vorpinventory:inspectPlayerClient3")
@@ -78,13 +74,11 @@ AddEventHandler("vorpinventory:inspectPlayerClient3", function(name, inv)
 					--print("Testing:", tostring(v["Id"]))
 					local closestPlayer, closestDistance = GetClosestPlayer()
 					TriggerServerEvent("vorpinventory:steal_weapon", v["Id"], GetPlayerServerId(closestPlayer))
-					WarMenu.CloseMenu()
 				end
 			end
 		end
 		WarMenu.Display()
 	end
-	WarMenu.CloseMenu()
 end)
 -------------------------------------------Main menu-------------------------------------------
 Citizen.CreateThread(function() 
@@ -94,21 +88,34 @@ Citizen.CreateThread(function()
 	
 	while true do
 		Citizen.Wait(0)
+		local closestPlayer, closestDistance = GetClosestPlayer()
+		
 		if WarMenu.IsMenuOpened('funny_search') then
 			if WarMenu.Button(Config.Language.money) then
 				WarMenu.CloseMenu()
+				FreezeEntityPosition(GetPlayerPed(), true)
+				FreezeEntityPosition(GetPlayerPed(closestPlayer), false)
+				Citizen.Wait(10)
+					TaskStartScenarioInPlace(PlayerPedId(), GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 0, true, false, false, false)
 				TriggerEvent("inspectplayer1")
 			elseif WarMenu.Button(Config.Language.items) then
 				WarMenu.CloseMenu()
+				FreezeEntityPosition(GetPlayerPed(), true)
+				FreezeEntityPosition(GetPlayerPed(closestPlayer), false)
+				Citizen.Wait(10)
+					TaskStartScenarioInPlace(PlayerPedId(), GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 0, true, false, false, false)
 				TriggerEvent("inspectplayer2")
 			elseif WarMenu.Button(Config.Language.weapons) then
 				WarMenu.CloseMenu()
+				FreezeEntityPosition(GetPlayerPed(), true)
+				FreezeEntityPosition(GetPlayerPed(closestPlayer), false)
+				Citizen.Wait(10)
+					TaskStartScenarioInPlace(PlayerPedId(), GetHashKey('WORLD_HUMAN_CROUCH_INSPECT'), 0, true, false, false, false)
 				TriggerEvent("inspectplayer3")
 			end
 			WarMenu.Display()
 		end
                         ----------------------------Keybind and call menu-------------------------
-	local closestPlayer, closestDistance = GetClosestPlayer()
 		if closestDistance < 2.0 and closestPlayer ~= -1 then
 			if Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) or IsEntityDead(GetPlayerPed(closestPlayer)) then
 				SetTextScale(0.5, 0.5)
@@ -118,12 +125,10 @@ Citizen.CreateThread(function()
 				Citizen.InvokeNative(0xE9990552DEC71600)
 				if IsControlJustReleased(0, Config.OpenMenu) then
 					WarMenu.OpenMenu('funny_search')
+					FreezeEntityPosition(GetPlayerPed(), true)
+					FreezeEntityPosition(GetPlayerPed(closestPlayer), false)
 				end
-			elseif not Citizen.InvokeNative(0x3AA24CCC0D451379, GetPlayerPed(closestPlayer)) or IsEntityDead(GetPlayerPed(closestPlayer)) then
-				WarMenu.CloseMenu()
 			end
-		elseif closestDistance > 2.0 and closestPlayer ~= -1 then
-			WarMenu.CloseMenu()
 		end		
 	end
 end)
@@ -176,20 +181,3 @@ function GetClosestPlayer()
     end
     return closestPlayer, closestDistance
 end
-
------------------------------Refresh
-RegisterNetEvent('funnysearch:refreshmenu')
-AddEventHandler('funnysearch:refreshmenu', function(Id,qt)
-	WarMenu.OpenMenu('funny_search')
-	if Id ~= nil and qt ~= nil then
-		for k,v in pairs(inv) do 
-			if v.Id == Id then
-				if v.Quantity == tonumber(qt) then
-					table.remove(inv,k)
-				else
-					v.Quantity = v.Quantity - tonumber(qt)
-				end
-			end
-		end
-	end
-end)
