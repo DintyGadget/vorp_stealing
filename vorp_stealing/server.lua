@@ -23,10 +23,10 @@ AddEventHandler("vorpinventory:steal_money", function(target, qt)
     local _source = source
     local User = VorpCore.getUser(target) 
     local Character = User.getUsedCharacter 
-	local number = qt-Character.money -- This nonsense is needed to prevent players from abusing money.
-	if Character.money > 0 then
-	TriggerEvent("vorp:addMoney", _source, 0, tonumber(Character.money+number))
-	TriggerEvent("vorp:removeMoney", target, 0, tonumber(Character.money+number))
+	local number = Character.money-qt 
+	if Character.money >= qt then
+	TriggerEvent("vorp:addMoney", _source, 0, tonumber(qt))
+	TriggerEvent("vorp:removeMoney", target, 0, tonumber(qt))
 	end
 end)
 ----------------------------------------SearchItems---------------------------------------------------
