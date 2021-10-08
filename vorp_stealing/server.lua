@@ -24,9 +24,12 @@ AddEventHandler("vorpinventory:steal_money", function(target, qt)
     local User = VorpCore.getUser(target) 
     local Character = User.getUsedCharacter 
 	local number = Character.money-qt 
+
 	if Character.money >= qt then
+
 	TriggerEvent("vorp:addMoney", _source, 0, tonumber(qt))
 	TriggerEvent("vorp:removeMoney", target, 0, tonumber(qt))
+	
 	end
 end)
 ----------------------------------------SearchItems---------------------------------------------------
@@ -52,10 +55,12 @@ AddEventHandler("vorpinventory:steal_items", function(item, target, qt)
     local _source = source
     local User = VorpCore.getUser(target) 
     local Character = User.getUsedCharacter 
-	
+	local count = VorpInv.getItemCount(target, item)
+      if count >= tonumber(qt) then
 	--print("StealItems:", item)
 	VorpInv.addItem(_source, item, tonumber(qt))
 	VorpInv.subItem(target, item, tonumber(qt))
+	  end
 end)
 
 ------------------------------------------SearchWeapon-----------------------------------------------------

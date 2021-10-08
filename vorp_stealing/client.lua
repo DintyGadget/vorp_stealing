@@ -48,6 +48,8 @@ AddEventHandler("vorpinventory:inspectPlayerClient2", function(name, inv)
 							--print("Testing:", v["Id"])
 							local closestPlayer, closestDistance = GetClosestPlayer()
 							TriggerServerEvent("vorpinventory:steal_items", v["Id"], GetPlayerServerId(closestPlayer), qt)
+							--Citizen.Wait(0)
+						--	WarMenu.CloseMenu()
 						end
 					end)
 				end
